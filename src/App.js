@@ -7,20 +7,26 @@ import Dashboard from './DoctorComponents/Dashboard';
 import Prescription from './DoctorComponents/Prescription';
 import Login from './DoctorComponents/Login';
 import Sidebar from './DoctorComponents/Sidebar';
+import Home from './Components/Home';
+import PateintLogin from './PatientComponents/PateintLogin';
+import Registration from './PatientComponents/Registration';
 
 function App() {
   return (
-    <>
-    <Navbar_main/>
+    <div >
+      <Navbar_main/>
     <BrowserRouter>
-      <Routes>
+    <Routes>
+        <Route path="/" element={<Home />}/>
+        <Route path="/doctor/login" element={<Login />}/>
+        <Route path="/pateint/login" element={<PateintLogin />}/>
+        <Route path="/pateint/registration" element={<Registration />}/>
         <Route path="/doctor" element={<Dashboard />}/>
-        <Route path="/doctor/login" element={<Login />} />
         <Route path="/doctor/prescription" element={<Prescription />} />
-        
       </Routes>
     </BrowserRouter>
-    </>
+        
+    </div>
   );
 }
 

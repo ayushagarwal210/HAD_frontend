@@ -13,7 +13,7 @@ function Navbar_main() {
       <div id="page-wrap"/>
       </div>
       <Container>
-        <Navbar.Brand href="/doctor">HAD-PROJECT</Navbar.Brand>
+        <Navbar.Brand href="/">HAD-PROJECT</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">

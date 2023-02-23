@@ -47,21 +47,19 @@ function Prescription() {
     setMedicine(event)
   }
   async function fetchData(){
-    // const data= [...inputFeilds,observation,advice,value]
     const data=[medicine,observation,advice]
-    // await axios.post('http://localhost:8083/prescription/addPrescription',{
-    // "date":"2022-10-20",  
-    // "observation":observation,
-    //   "medicine":medicine,
-    //   "remark":advice,
-    //   "doctorName":"Old Monk",
-    //   "doctorId":1,
-    //   "pateintName":"Ayush",
-    //   "pateintId":2
-    // }).then((response)=>{
-    //   console.log(response)
-    // })
-    console.log(data)
+    await axios.post('http://localhost:8080/prescription/addPrescription',{
+      "date": "2023-02-22",
+      "observation": observation,
+      "medicine": medicine,
+      "remark": advice,
+      "doctorName": "Aakanksha",
+      "doctorId": 1,
+      "patientName": "Yash",
+      "patientId": 1
+    }).then((response)=>{
+      console.log(response)
+    })
   }
   
   const submitHandler= async(event)=>{
