@@ -14,9 +14,9 @@ function App() {
     <Navbar_main/>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard />}/>
-        <Route path="/login" element={<Login />} />
-        <Route path="/prescription" element={<Prescription />} />
+        <Route path="/doctor" element={<Dashboard />}/>
+        <Route path="/doctor/login" element={<Login />} />
+        <Route path="/doctor/prescription" element={<Prescription />} />
         
       </Routes>
     </BrowserRouter>
