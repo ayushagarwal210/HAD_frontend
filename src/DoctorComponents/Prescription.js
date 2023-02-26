@@ -1,78 +1,83 @@
-import { useState,useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import * as React from 'react';
-import dayjs from 'dayjs';
-import TextField from '@mui/material/TextField';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import * as React from "react";
+import dayjs from "dayjs";
+import TextField from "@mui/material/TextField";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import axios from "axios";
+import DoctorNavbar from "./DoctorNavbar";
+import { useParams } from "react-router-dom";
 
 function Prescription() {
   const [inputFeilds, setInputFeilds] = useState([
-    {medicine:'',dosage:''}
-  ])
-  const handleFormChange= (index,event)=>{
-    let data=[...inputFeilds];
-    data[index][event.target.name]=event.target.value;
+    { medicine: "", dosage: "" },
+  ]);
+  const handleFormChange = (index, event) => {
+    let data = [...inputFeilds];
+    data[index][event.target.name] = event.target.value;
     setInputFeilds(data);
-  }
+  };
   const addFields = (event) => {
-    event.preventDefault()
-    let newfield = { medicine: '', dosage: '' }
-    setInputFeilds([...inputFeilds, newfield])
-  }
+    event.preventDefault();
+    let newfield = { medicine: "", dosage: "" };
+    setInputFeilds([...inputFeilds, newfield]);
+  };
   const removeFields = (index) => {
     let data = [...inputFeilds];
-    data.splice(index, 1)
-    setInputFeilds(data)
-  }
+    data.splice(index, 1);
+    setInputFeilds(data);
+  };
   const [value, setValue] = React.useState(dayjs(new Date()));
 
   const handleChangeTime = (newValue) => {
     setValue(newValue);
   };
 
-  const [observation, setObservation] = useState()
-  const [advice, setAdvice] = useState()
-  const [medicine, setMedicine] = useState()
-  const handleChangeObservation=(event)=>{
+  const [observation, setObservation] = useState();
+  const [advice, setAdvice] = useState();
+  const [medicine, setMedicine] = useState();
+  const handleChangeObservation = (event) => {
     setObservation(event);
+  };
+  const handleChangeAdvice = (event) => {
+    setAdvice(event);
+  };
+  const handleChangeMedicine = (event) => {
+    setMedicine(event);
+  };
+  const { uid } = useParams();
+
+  async function fetchData() {
+    await axios
+      .post("http://localhost:9090/prescription/addPrescription", {
+        date: new Date(),
+        observation: observation,
+        medicine: medicine,
+        remark: advice,
+        doctorName: "Aakanksha",
+        doctorId: 3,
+        patientName: "Yash",
+        patientId: 1,
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
   }
-  const handleChangeAdvice=(event)=>{
-    setAdvice(event)
-  }
-  const handleChangeMedicine=(event)=>{
-    setMedicine(event)
-  }
-  async function fetchData(){
-    const data=[medicine,observation,advice]
-    await axios.post('http://localhost:8080/prescription/addPrescription',{
-      "date": "2023-02-22",
-      "observation": observation,
-      "medicine": medicine,
-      "remark": advice,
-      "doctorName": "Aakanksha",
-      "doctorId": 1,
-      "patientName": "Yash",
-      "patientId": 1
-    }).then((response)=>{
-      console.log(response)
-    })
-  }
-  
-  const submitHandler= async(event)=>{
-    event.preventDefault();
+  const submitHandler = async (event) => {
+    // event.preventDefault();
     await fetchData();
-  }
+  };
   useEffect(() => {
-    fetchData()
-  }, [])
-  
-  
-    return (
-        <div className="container">
+    fetchData();
+  }, []);
+
+  return (
+    <>
+      <DoctorNavbar />
+      <div className="container">
         <Form onSubmit={submitHandler}>
           {/* This code will be used later */}
           {/* ********************************** */}
@@ -93,39 +98,51 @@ function Prescription() {
           })}
           <button onClick={addFields}>Add More..</button> */}
           {/* **************************************** */}
-          
-          <Form.Group  className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Medicine and Dosage</Form.Label>
-            <Form.Control  name="medicine" value={medicine} onChange={(e)=>handleChangeMedicine(e.target.value)}/>
-            </Form.Group>
 
-          <Form.Group  className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Medicine and Dosage</Form.Label>
+            <Form.Control
+              name="medicine"
+              value={medicine}
+              onChange={(e) => handleChangeMedicine(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Observation</Form.Label>
-            <Form.Control  name="observation" value={observation} onChange={(e)=>handleChangeObservation(e.target.value)}/>
+            <Form.Control
+              name="observation"
+              value={observation}
+              onChange={(e) => handleChangeObservation(e.target.value)}
+            />
           </Form.Group>
-            
-            <Form.Group  className="mb-3" controlId="formBasicEmail">
+
+          <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Remarks</Form.Label>
-            <Form.Control  name="advice" value={advice} onChange={(e)=>handleChangeAdvice(e.target.value)}/>
+            <Form.Control
+              name="advice"
+              value={advice}
+              onChange={(e) => handleChangeAdvice(e.target.value)}
+            />
           </Form.Group>
-          <Form.Group  className="mb-3" controlId="formBasicEmail">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DesktopDatePicker 
-          label="Follow up"
-          inputFormat="DD/MM/YYYY"
-          value={value}
-          onChange={handleChangeTime}
-          renderInput={(params) => <TextField {...params} />}
-        />
-        </LocalizationProvider>
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DesktopDatePicker
+                label="Follow up"
+                inputFormat="DD/MM/YYYY"
+                value={value}
+                onChange={handleChangeTime}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
           </Form.Group>
-          
-          <Button variant="primary" type="submit" >
+
+          <Button variant="primary" type="submit">
             Submit
           </Button>
-          
         </Form>
-        </div>
-      );
+      </div>
+    </>
+  );
 }
-export default Prescription
+export default Prescription;

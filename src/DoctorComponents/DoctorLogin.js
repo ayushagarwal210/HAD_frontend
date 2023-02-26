@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 // import "./style.css";
 import axios from "axios";
 import NavbarHome from "../Components/NavbarHome";
+import DoctorNavbar from "./DoctorNavbar";
 
-export default function PateintLogin() {
-  const baseURL = "http://localhost:9090/patient/login";
+const DoctorLogin = () => {
+  const baseURL = "http://localhost:9090/doctor/login";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,38 +21,30 @@ export default function PateintLogin() {
     setPassword(event.target.value);
   };
 
-  // const handleSubmit = async (event) => {
-  //     event.preventDefault(); //important to not reload page
-  // }
-
-  const handleSubmit = async (id, event) => {
-    event.preventDefault();
-
-    await axios
-      .post(baseURL, {
+  const handleSubmit = async (id) => {
+    // event.preventDefault(); //important to not reload page
+    try {
+      const response = await axios.post(baseURL, {
         email: email,
         password: password,
-      })
-      .then((response) => {
-        console.log(response.data);
-        // handler(response.data);
-        window.sessionStorage.setItem("user", JSON.stringify(response.data));
-        window.location.reload(true);
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("Invalid Credentials");
       });
-    window.location.replace(`/pateint`);
+      window.sessionStorage.setItem("doctor", JSON.stringify(email));
+      window.location.reload(true);
+    } catch (error) {
+      console.log(error);
+      alert("Invalid Credentials");
+    }
+
+    window.location.replace(`/doctor`);
   };
 
   return (
     <>
       <NavbarHome />
-      <div className="container card mt-2 p-4">
-        <h2 className="text-center">Patient Login</h2>
+      <div className="container card p-4 mt-2">
+        <h2 className="text-center">Doctor Login</h2>
 
-        <Form title="Patient Login">
+        <Form title="Doctor Login">
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control
@@ -83,4 +76,6 @@ export default function PateintLogin() {
       </div>
     </>
   );
-}
+};
+
+export default DoctorLogin;
